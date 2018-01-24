@@ -20,7 +20,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        stop.isEnabled = false
+        configureUI(.notrecording)
     }
     
     @IBAction func recordButtonPressed(_ sender: Any) {
