@@ -54,7 +54,6 @@ class PlaySoundsViewController: UIViewController {
         
     @IBAction func stopButtonPressed(_ sender: Any) {
         stopAudio()
-        configureUI(.notPlaying)
     }
     
     override func viewDidLoad() {
@@ -64,8 +63,9 @@ class PlaySoundsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        stopButton.isEnabled = false
+        configureUI(.notPlaying)
     }
+
 
 
         

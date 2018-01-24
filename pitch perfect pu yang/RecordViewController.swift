@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  RecordViewController.swift
 //  pitch perfect pu yang
 //
 //  Created by pu yang on 1/21/18.
@@ -17,20 +17,15 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
 
     var audioRecorder: AVAudioRecorder!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         stop.isEnabled = false
     }
     
     @IBAction func recordButtonPressed(_ sender: Any) {
         
-        label.text="recording in progress"
-        stop.isEnabled=true
-        record.isEnabled=false
+        configureUI(.recording)
         
         let dirPath=NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask,true)[0] as String
         
@@ -50,9 +45,7 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
     }
     
     @IBAction func stopButtonPressed(_ sender: Any) {
-        record.isEnabled = true
-        stop.isEnabled = false
-        label.text = "Tap to Record"
+        configureUI(.notrecording)
         audioRecorder.stop()
         
         let audiosession = AVAudioSession.sharedInstance()
@@ -65,6 +58,13 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
         }
         else {
             print("Voice not recorded")
+            let alert = UIAlertController(title: "Sorry", message: "Voice not recorded", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "OK, I will try again", style: .default, handler: { (action) in
+                alert.dismiss(animated: true, completion: nil)
+            }))
+            
+            present(alert, animated: true, completion: nil)
         }
     }
     
@@ -74,6 +74,22 @@ class RecordViewController: UIViewController, AVAudioRecorderDelegate {
             let recordedAudioURL = sender as! URL
             playSoundsVC.recordedAudioURL = recordedAudioURL
             print("Recorded Audio Url: \(recordedAudioURL)")
+        }
+    }
+    
+    enum RecordingState { case recording, notrecording }
+    
+    func configureUI(_ recordingState: RecordingState) {
+        switch(recordingState) {
+        case .recording:
+            label.text="Recording in progress"
+            stop.isEnabled=true
+            record.isEnabled=false
+            
+        case .notrecording:
+            record.isEnabled = true
+            stop.isEnabled = false
+            label.text = "Tap to Record"
         }
     }
 
